@@ -1,4 +1,4 @@
-const yargs = require('yargs')
+// const yargs = require('yargs')
 const chalk = require('chalk')
 const figlet = require('figlet')
 const inquirer = require('inquirer');
@@ -20,7 +20,7 @@ const removeQuestion = [
 ]
 
 const main = () => {
-    console.log(chalk.blue(figlet.textSync("Notes App")));
+    console.log(chalk.magenta(figlet.textSync("Reminders", { font: 'ANSI Shadow'})));
     console.log("Starting up the app...");
     app();
 };
@@ -32,18 +32,20 @@ const app = async () => {
         const answer = await inquirer.prompt(addQuestion);
         addNotes(answer.add);
         app();
-    } 
-    else if (answers.options == "list") {
+    } else if (answers.options == "list") {
         listNotes();
         app();
-    } 
-    else if (answers.option == "remove") {
-        listNotes();
-        const answer = await inquirer.prompt(removeQuestion);
-        console.log(answer);
-        app();
-    } 
-    else if (answers.option == "exit") {
+    } else if (answers.options == "remove") {
+        try {
+            listNotes();
+            const answer = await inquirer.prompt(removeQuestion);
+            removeNote(answer.remove);
+            app();
+        }
+        catch (error) {
+            console.log(error)
+        }
+    } else if (answers.options == "exit") {
         console.log("Goodbye.");
     }
 }
